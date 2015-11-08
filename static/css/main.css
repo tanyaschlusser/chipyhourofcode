@@ -334,7 +334,7 @@ SPLASH
 
 #video-link:link {
     display: inline-block;
-    margin-top: 0.5em;
+    margin-top: 0.1em;
     padding: 0.8em 0 0.8em 2.3em;
     font-size: 1.2em;
     background: url(../img/video-icon.png) no-repeat left center;
