@@ -263,13 +263,13 @@ def index():
     return render_template('index.html')
 
 
-@app.route("/about/")
+@app.route("/about")
 def about():
     """About is a static page."""
     return render_template('about.html')
 
 
-@app.route("/location/")
+@app.route("/location")
 def location():
     """Location is a static page."""
     return render_template('location.html')
@@ -281,12 +281,10 @@ def register():
 
     GET = form.
     POST = registration.
-    GET + UID = confirmation.
-    POST + UID = update or unregister + confirmation.
     """
-    if uid is None and request.method == 'GET':
-        return render_template()
-    elif uid is None and request.method == 'POST':
+    if request.method == 'GET':
+        return render_template('register.html')
+    elif request.method == 'POST':
         print("Post to the DB here then render the confirmation")
         return redirect(url_for('confirmation', uid=uid))
 

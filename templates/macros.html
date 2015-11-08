@@ -1,25 +1,17 @@
 {# contains all of the macros for this project.
- #
- # app_review(review)
- #   review = dict(avatar=string,
- #                 nickname=string,
- #                 usability=number (1 to 3), 
- #                 effectiveness=number (1 to 3), 
- #                 review=string)
- #
- # nav()
- # footer()
+ #   nav()
+ #   footer()
  #}
 
 {% macro nav() -%}
 <div>
     <nav class="site-nav text-right">
-        <a href="#" id="nav-button" class="right" onclick="toggle_shownav()" >Menu</a>
+        <a href="#" id="nav-button" class="right" onclick="toggle_shownav(event)" >Menu</a>
         <ul>
         {% if request.path != "/" %}
           <li><a href="{{ url_for('index') }}">Main</a></li>
         {% endif %}
-        {% if request.path != "/register" %}
+        {% if request.path != "/register/" %}
           <li><a href="{{ url_for('register') }}">Register</a></li>
         {% endif %}
         {% if request.path != "/location" %}
@@ -35,7 +27,7 @@
 
 
 {% macro footer() -%}
-<footer id="site-footer" {%if request.path == "/register" %}style="position:relative;top:90%"{% endif %}>
+<footer id="site-footer" {%if request.path == "/register/" %}style="position:relative;top:90%"{% endif %}>
   <p class="copyright">
     Organized with  &#10084; by <a style="color: white;text-decoration:underline" href="http://www.chipy.org/">ChiPy</a>
     &amp;

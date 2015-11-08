@@ -7,39 +7,55 @@
 {% block content -%}
     <div>
       {{ macros.nav() }}
-        <div
-          class="printable"
-          style="display:flex;flex-wrap:wrap;justify-content:space-around;background:white;width:100%;padding:2em;">
+      <div
+        class="printable"
+        style="display:flex;flex-wrap:wrap;justify-content:space-around;background:white;width:100%;padding:2em;">
           <h3 style="width:100%;text-align:center;color: rgb(26,172,186);">
             The volunteers bringing you an Hour of Code
           </h3>
 
 {% if volunteers is defined  %}
   {% for volunteer in volunteers %}
-      <div style="width:42%;margin:1em;flex:1;min-width:400px">
-        <img src="{{ url_for('static', filename='img/speakers/{{volunteer.headshot}}') }}"
-             alt="{{ volunteer.name }}" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
-        <b style="font-weight:900;font-size:1.2em">volunteer.name</b>
-        <p>volunteer.bio</p>
-      </div>
+        <div style="width:42%;margin:1em;flex:1;min-width:400px">
+          <img src="{{ url_for('static', filename='img/speakers/{{volunteer.headshot}}') }}"
+               alt="{{ volunteer.name }}"
+               style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
+          <b style="font-weight:900;font-size:1.2em">volunteer.name</b>
+          <p>volunteer.bio</p>
+        </div>
   {% endfor %}
 {% else %}
-      <div style="width:42%;margin:1em;flex:1;min-width:400px">
-        <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
-             alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
-        <b style="font-weight:900;font-size:1.2em">person placeholder</b>
-        <p>biographical details</p>
-      </div>
-      <div style="width:42%;margin:1em;flex:1;min-width:400px">
-        <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
-             alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
-        <b style="font-weight:900;font-size:1.2em">person placeholder</b>
-        <p>biographical details</p>
-      </div>
-{% endif %}
+        <div style="width:42%;margin:1em;flex:1;min-width:400px">
+          <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
+               alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
+          <b style="font-weight:900;font-size:1.2em">person placeholder</b>
+          <p>biographical details</p>
         </div>
+        <div style="width:42%;margin:1em;flex:1;min-width:400px">
+          <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
+               alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
+          <b style="font-weight:900;font-size:1.2em">person placeholder</b>
+          <p>biographical details</p>
+        </div>
+{% endif %}
+      </div>
     </div>
 
-{{ macros.footer() }}
+<div>
+<footer id="site-footer">
+  <p class="copyright">
+    Organized with  &#10084; by <a style="color: white;text-decoration:underline" href="http://www.chipy.org/">ChiPy</a>
+    &amp;
+    <a style="color: white;text-decoration:underline"
+      href="http://labs.feinberg.northwestern.edu/mandel/teaching/pfb.html">Programming for Biologists</a>
+  </p>
+<div style="display:flex;justify-content:space-around;width:100%;padding:2em;">
+<img src="../static/img/sponsors/chipy.png" alt="ChiPy" style="height:3em;margin-right:1em;"></img>
+<img src="../static/img/sponsors/nuit.jpeg" alt="nuit" style="height:3em;margin-right:1em;"></img>
+<img src="../static/img/sponsors/ctd.jpeg" alt="ctd" style="height:3em;margin-right:1em;"></img>
+<img src="../static/img/sponsors/pfb.png" alt="Programming for Biologists" style="height:3em;margin-left:1em;"></img>
+</div>
+</footer>
+</div>
 
 {%- endblock %}
