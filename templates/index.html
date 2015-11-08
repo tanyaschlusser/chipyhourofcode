@@ -1,0 +1,165 @@
+{% extends "base.html" %}  
+{% import "macros.html" as macros %}
+{% block description %}
+    Sign up for the Hour of Code hosted by Chipy and Northwestern!
+    December 13, 9-11:30 am. Join millions of kids around the world to try out computer programming.
+{% endblock %}
+
+{% block content -%}
+<div id="splash" >
+  <div id="splash-info" class="text-center">
+    {{ macros.nav() }}
+
+        <div class="to">
+            <div class="ti">
+                <h1 class="site-title">
+                <img src="{{ url_for('static', filename='img/logo.png') }}"
+                     style="vertical-align:text-top;width:2.5em;padding:0.25em 0.5em 0 0;float:left;"></img>
+                <span id="event-title">ChiPy + NU's Programming for Biologists<br/> host Hour of Code</span> </h1>
+                <p class="site-description">
+                    Join other students aged 5-10 for a fun intro to programming!
+                </p>
+                <p class="event-date" style="margin-bottom:0">
+                    December 13, 9-11 am
+                </p>
+                <p class="event-host">
+                    Hosted at <a href="https://www.google.com/maps/place/Feinberg+School+of+Medicine/" target="_blank">Northwestern's Feinberg School of Medicine</a>
+                </p>
+                <a href="{{ url_for('register') }}" class="button register-button round-corners">
+                  Register!
+                </a>
+
+                <div class="text-center">
+                    <p class="show-for-large-up"><a href="#" id="video-link">Watch video</a></p>
+                    <p class="show-for-medium-down promotion-video"><a href="https://www.youtube.com/embed/FC5FbmsH4fw" target="_blank" id="video-link">Watch video</a></p>
+                </div>
+                <a href="#faqAnchor" class="anchorLink"><span id="arrow"></span></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="overlay"></div>
+</div>
+
+<div class="hide-for-small-only">
+    <a href="#" id="splash-return" class="round-corners">Return</a>
+    <iframe width="480" height="270" src="https://www.youtube.com/embed/FC5FbmsH4fw" id="splash-video" allowtransparency="true" frameborder="0" allowfullscreen mozallowfullscreen webkitallowfullscreen oallowfullscreen msallowfullscreen ></iframe>
+</div>
+
+
+<!--- Scrolling section --->
+<div id="over">
+
+<a href="#" id="faqAnchor"></a>
+<section id="faq">
+  
+  <div class="row">
+
+    <h2 class="section-title text-center">FAQ</h2>
+    <div class="columns medium-6">
+      <h3 class="faq-q">What is Hour of Code?</h3>
+      <p class="faq-a">The Hour of Code is a one-hour introduction to computer science,
+      designed to demystify code and show that anybody can learn the basics.
+      It is held as part of <a href="http://csedweek.org/">Computer Science Education Week</a>, and we hope
+      it inspires a lifetime of fun with computers!</p>
+    </div>
+
+    <div class="columns medium-6">
+      <h3 class="faq-q">Why computer science?</h3>
+      <p class="faq-a"><em>Every</em> student should have the opportunity to learn computer science.
+      It helps nurture problem-solving skills, logic and creativity. By starting early,
+      students will have a foundation for success in any 21st-century career path.
+      See more stats on <a href="https://code.org/">code.org</a>.</p>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="columns medium-6">
+      <h3 class="faq-q">Do I need a laptop?</h3>
+      <p class="faq-a">If you want to use a laptop and mouse, bring them. We will also have activities
+        for smartphones or tablets, and one that requires no computer at all.</p>
+    </div>
+
+    <div class="columns medium-6">
+      <h3 class="faq-q">Should I bring an adult?</h3>
+      <p class="faq-a">Yes, please! The target audience for our event are students new to programming,
+        ages 5 - 10. We would prefer if your adult stays to make sure you're having fun.
+        (We'll have coffee and snacks for them.)</p>
+    </div>
+  </div>
+  
+  <div class="row">
+
+    <div class="columns medium-6">
+      <h3 class="faq-q">But, I don't know how to code...</h3>
+      <p class="faq-a">Great! We want to introduce you to programming,
+      and to some Chicago programmers.</p>
+    </div>
+
+  </div>
+
+</section>
+<section id="schedule" class="text-center">
+  <h2 class="section-title text-center">Schedule</h2>
+  <div style="width:90%;margin-left:auto;margin-right:auto;" >
+    <h3 class="schedule-day">Sunday, 13 December 2015</h3>
+
+    <div class="hide-for-small-only">
+    <div class="schedule-panel round-corners">
+      <div class="entry">
+        <span class="schedule-time">9 am</span><br/>
+          Scones and juice
+      </div>
+      <div class="entry">
+        <span class="schedule-time">9:15 - 9:45 am</span><br/>
+          Panel of Computer Science<br/>professionals from ChiPy + NUIT
+      </div>
+      <div class="entry">
+        <span class="schedule-time">9:45 - 10:45 am</span><br/>
+          Split into groups for<br/>the "Hour of Code" activity
+      </div>
+    </div>
+    </div>
+
+    <div class="show-for-small-only">
+    <div class="schedule-panel round-corners">
+      <div class="entry" style="min-width:80%">
+        <span class="schedule-time">9 am</span><br/>
+          Scones and juice
+      </div>
+      <div class="entry" style="min-width:80%">
+        <span class="schedule-time">9:15 - 9:45 am</span><br/>
+          Panel of Computer Science<br/>professionals from ChiPy + NUIT
+      </div>
+      <div class="entry" style="min-width:80%">
+        <span class="schedule-time">9:45 - 10:45 am</span><br/>
+          Split into groups for<br/>the "Hour of Code" activity
+      </div>
+    </div>
+    </div>
+  </div>
+
+</section>
+<section id="pitch" class="text-center">
+  <h2 class="tag">Ready for an hour of code?</h2>
+  <div class="pitch-info">
+    <p>Learn a new skill, meet actual programmers, and have fun.</p>
+     <p>We only have 20 spots, so sign up soon!</p>
+     <a href="/register" class="button register-button round-corners">Sign up</a>
+  </div>
+</section>
+<section id="sponsors">
+  <h2 class="section-title text-center">Sponsors</h2>
+
+  <a title="NUIT" target="_blank" href="http://www.it.northwestern.edu/" class="medium-4 small-12 current-sponsor sponsor-nuit"><div class="sponsor-image"></div></a>
+  <a title="CTD" target="_blank" href="http://www.ctd.northwestern.edu" class="medium-4 small-12 current-sponsor sponsor-ctd"><div class="sponsor-image"></div></a>
+  <a title="ChiPy" target="_blank" href="http://www.chipy.org" class="medium-4 small-12 current-sponsor sponsor-chipy"><div class="sponsor-image"></div></a>
+  <a title="Programming for Biologists" target="_blank" href="http://labs.feinberg.northwestern.edu/mandel/teaching/pfb.html" class="medium-4 small-12 current-sponsor sponsor-programmingforbiologists"><div class="sponsor-image"></div></a>
+
+</section>
+
+{{ macros.footer() }}
+</div> <!-- end of 'over' -->
+
+{%- endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "macros.html" as macros %}
+
+{% block description %}
+    Location for the Hour of Code hosted by Chipy and Northwestern.
+{% endblock %}
+{% block content -%}
+    <div class="text-center">
+        {{ macros.nav() }}
+
+        <div class="printable" style="display:flex;flex-wrap:wrap;justify-content:space-around;background:white;width:100%;padding:2em;">
+          <div style="width:42%;margin:1em;flex:1;min-width:400px">
+            <h4>13 December 2015, 9-11am</h4>
+              Feinberg School of Medicine
+              <ul>
+                <li><br/></li>
+                <li>Bring:</li>
+                <ul style="color:black;font-size:90%">
+                  <li>parent | guardian</li>
+                  <li>laptop | tablet | smartphone</li>
+                </ul>
+                <li><br/></li>
+                <li>Schedule:</li>
+                <ul style="color:black;font-size:90%">
+                  <li>9:15 &mdash; panel of professionals</li>
+                  <li>9:45 &mdash; hour of code</li>
+                  <li>10:45 &mdash; wrap up</li>
+                </ul>
+              </ul>
+          </div>
+          <iframe style="width:55%;min-width:400px;flex:1;height:80vh;min-height:300px;padding: 0 1px 0 0;margin:1em;border:1px solid gray;"
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyDHqspmD3pXGTlSBIvliUMVH5d5b8U2Y3A&q=Feinberg+School+of+Medicine,Chicago+IL" allowfullscreen>
+</iframe>
+          </div>
+
+</div>
+
+{{ macros.footer() }}
+{%- endblock %}

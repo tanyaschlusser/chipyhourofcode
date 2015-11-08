@@ -1,0 +1,57 @@
+{% extends "base.html" %}  
+{% import "macros.html" as macros %}
+{% block description %}
+    Registration for the Hour of Code hosted by Chipy and Northwestern
+{% endblock %}
+
+{% block content -%}
+<div id="splash" >
+  <div id="splash-info" class="text-center">
+    {{ macros.nav() }}
+
+        <h1 class="site-title">
+        <img src="../static/img/logo.png" style="vertical-align:text-bottom;width:2.5em;padding:0 0.5em;float:left;"></img>
+        <span id="event-title" style="vertical-align:middle">Register for ChiPy's Hour of Code</span> </h1>
+        <p class="site-description">
+            Join other students aged 5-10 for a fun intro to programming!
+        </p>
+
+<form id="registrationForm" method="POST" style="width:42em;margin-left:auto;margin-right:auto;">
+  <label for="name">Your name</label>
+  <input autofocus="autofocus"
+         type="text"
+         maxlength=48
+         id="name"
+         name="name"
+         placeholder="(Your name)"
+         required="required"
+         size=24
+         style="width:24em"></input>
+  <label for="guardian_email">Parent / guardian's email (for confirmation)</label>
+  <input type="email"
+         maxlength=54
+         id="guardian_email"
+         name="guardian_email"
+         placeholder="(Parent or guardian's email)"
+         required="required"
+         size=32
+         style="width:28em"></input>
+  <label for="guardian_name">Parent / guardian you are bringing</label>
+  <input type="text"
+         maxlength=48
+         id="guardian_name"
+         name="guardian_name"
+         placeholder="(Parent or guardian's name)"
+         required="required"
+         size=24
+         style="width:24em"></input>
+  <input type="submit" id="register" class="button register-button round-corners" name="register" value="Register" style="height:3.5em"></input>
+</form>
+
+    </div>
+
+    <div id="overlay"></div>
+</div>
+
+{{ macros.footer() }}
+{%- endblock %}

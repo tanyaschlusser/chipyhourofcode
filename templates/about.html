@@ -1,0 +1,45 @@
+{% extends "base.html" %}  
+{% import "macros.html" as macros %}
+
+{% block description %}
+    About the Hour of Code hosted by Chipy and Northwestern.
+{% endblock %}
+{% block content -%}
+    <div>
+      {{ macros.nav() }}
+        <div
+          class="printable"
+          style="display:flex;flex-wrap:wrap;justify-content:space-around;background:white;width:100%;padding:2em;">
+          <h3 style="width:100%;text-align:center;color: rgb(26,172,186);">
+            The volunteers bringing you an Hour of Code
+          </h3>
+
+{% if volunteers is defined  %}
+  {% for volunteer in volunteers %}
+      <div style="width:42%;margin:1em;flex:1;min-width:400px">
+        <img src="{{ url_for('static', filename='img/speakers/{{volunteer.headshot}}') }}"
+             alt="{{ volunteer.name }}" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
+        <b style="font-weight:900;font-size:1.2em">volunteer.name</b>
+        <p>volunteer.bio</p>
+      </div>
+  {% endfor %}
+{% else %}
+      <div style="width:42%;margin:1em;flex:1;min-width:400px">
+        <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
+             alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
+        <b style="font-weight:900;font-size:1.2em">person placeholder</b>
+        <p>biographical details</p>
+      </div>
+      <div style="width:42%;margin:1em;flex:1;min-width:400px">
+        <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
+             alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
+        <b style="font-weight:900;font-size:1.2em">person placeholder</b>
+        <p>biographical details</p>
+      </div>
+{% endif %}
+        </div>
+    </div>
+
+{{ macros.footer() }}
+
+{%- endblock %}
