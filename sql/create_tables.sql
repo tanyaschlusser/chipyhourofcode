@@ -15,10 +15,10 @@ CREATE TABLE IF NOT EXISTS attendee (
   UNIQUE INDEX child_guardian_pair (attendee_name, guardian_email);
 );
 
-CREATE TABLE IF NOT EXISTS speaker (
+CREATE TABLE IF NOT EXISTS volunteer (
   id MEDIUMINT NOT NULL AUTO_INCREMENT,
-  speaker_name varchar(64),
-  img_path varchar(64),
-  speaker_bio varchar(1024),
+  name varchar(64),
+  headshot varchar(64),
+  bio varchar(1024),
   PRIMARY KEY (id)
 );

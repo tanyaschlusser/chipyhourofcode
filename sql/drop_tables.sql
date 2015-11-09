@@ -6,4 +6,4 @@
  */
 
 DROP TABLE IF EXISTS attendee;
-DROP TABLE IF EXISTS speaker;
+DROP TABLE IF EXISTS volunteer;
