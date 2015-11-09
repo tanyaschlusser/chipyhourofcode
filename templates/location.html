@@ -27,6 +27,21 @@
                   <li>9:45 &mdash; hour of code</li>
                   <li>10:45 &mdash; wrap up</li>
                 </ul>
+                <li><br/></li>
+                <li>
+    <span class="addtocalendar atc-style-blue">
+        <var class="atc_event">
+            <var class="atc_date_start">2015-12-13 09:00:00</var>
+            <var class="atc_date_end">2015-12-13 11:00:00</var>
+            <var class="atc_timezone">America/Chicago</var>
+            <var class="atc_title">Hour of Code</var>
+            <var class="atc_description">ChiPy + Programming for Biologists host a fun hour of code.</var>
+            <var class="atc_location">Feinberg School of Medicine, Chicago, IL</var>
+            <var class="atc_organizer">ChiPy + Programming for Biologists</var>
+            <!--<var class="atc_organizer_email">chicago-organizers@</var>-->
+        </var>
+    </span>
+                </li>
               </ul>
           </div>
           <iframe style="width:55%;min-width:400px;flex:1;height:80vh;min-height:300px;padding: 0 1px 0 0;margin:1em;border:1px solid gray;"
@@ -37,4 +52,13 @@
 </div>
 
 {{ macros.footer() }}
+<script type="text/javascript">
+    (function () {
+            if (window.addtocalendar)if(typeof window.addtocalendar.start == "function")return;
+            if (window.ifaddtocalendar == undefined) { window.ifaddtocalendar = 1;
+                var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                s.type = 'text/javascript';s.charset = 'UTF-8';s.async = true;
+                s.src = ('https:' == window.location.protocol ? 'https' : 'http')+'://addtocalendar.com/atc/1.5/atc.min.js';
+                var h = d[g]('body')[0];h.appendChild(s); }})();
+</script>
 {%- endblock %}
