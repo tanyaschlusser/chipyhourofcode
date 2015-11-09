@@ -15,7 +15,7 @@
           <li><a href="{{ url_for('register') }}">Register</a></li>
         {% endif %}
         {% if request.path != "/location" %}
-          <li><a href="{{ url_for('location') }}">Details</a></li>
+          <li><a href="{{ url_for('location') }}">Where?</a></li>
         {% endif %}
         {% if request.path != "/about" %}
           <li><a href="{{ url_for('about') }}">People</a></li>
