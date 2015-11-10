@@ -114,6 +114,8 @@ def get_db():
     """Set the flask 'g' value for _database, and return it."""
     db = getattr(g, "_database", None)
     if not db:
+        if db is not None:
+            db.close()
         db = g._database = connect_db()
     return db
 
