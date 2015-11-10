@@ -30,9 +30,9 @@
       {# Filled using 'doFlashes()' below. #}
     </span>
 
-{% if not attendee_data defined %}
+{% if not attendee_data %}
   <h4>Successfully unregistered, thank you!</h4>
-{% elif attendee_data.rank defined and attendee_data.rank < 20 %}
+{% elif attendee_data.rank and attendee_data.rank < 20 %}
     <span class="addtocalendar atc-style-blue">
         <var class="atc_event">
             <var class="atc_date_start">2015-12-13 09:00:00</var>
