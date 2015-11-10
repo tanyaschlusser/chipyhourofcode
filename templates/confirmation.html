@@ -30,7 +30,7 @@
       {# Filled using 'doFlashes()' below. #}
     </span>
 
-{% if attendee_data is none %}
+{% if attendee_data is defined %}
   <h4>Successfully unregistered, thank you!</h4>
 {% else %}
 {% if attendee_data.rank < 20 %}
