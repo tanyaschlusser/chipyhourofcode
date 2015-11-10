@@ -167,11 +167,13 @@ def db_query(query, args=[], commit=False):
     False if the query fails.
     """
     db = get_db()
+    all_results = []
     with db.begin() as connection:
         result = db.execute(query, args)
         if result and result.returns_rows:
-            return [r for r in result.fetchall()]
-    return []
+            all_results = [r for r in result.fetchall()]
+    db.close()
+    return all_results
     
 
 def db_select(query, args=[], columns=None):
