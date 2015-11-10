@@ -27,9 +27,9 @@
          maxlength=48
          id="attendee_name"
          name="attendee_name"
-        {% if attendee_data not defined %}
+        {% if not attendee_data defined %}
           placeholder="(First and last name)"
-        {% elif attendee_data.attendee_name %}
+        {% elif attendee_data.attendee_name defined %}
           value="{{ attendee_data.attendee_name }}"
         {% endif %}
          required="required"
@@ -40,9 +40,9 @@
          maxlength=54
          id="guardian_email"
          name="guardian_email"
-        {% if attendee_data not defined %}
+        {% if not attendee_data defined %}
           placeholder="(Parent or guardian's email)"
-        {% elif attendee_data.guardian_email %}
+        {% elif attendee_data.guardian_email defined %}
           value="{{ attendee_data.guardian_email }}"
         {% endif %}
          required="required"
@@ -53,9 +53,9 @@
          maxlength=48
          id="guardian_name"
          name="guardian_name"
-        {% if attendee_data not defined %}
+        {% if not attendee_data defined %}
           placeholder="(Parent or guardian's name)"
-        {% elif attendee_data.guardian_name %}
+        {% elif attendee_data.guardian_name defined %}
           value="{{ attendee_data.guardian_name }}"
         {% endif %}
          required="required"
