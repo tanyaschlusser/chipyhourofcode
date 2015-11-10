@@ -173,6 +173,7 @@ def db_query(query, args=[], commit=False):
         if result and result.returns_rows:
             all_results = [r for r in result.fetchall()]
     db.close()
+    g._database = None
     return all_results
     
 
