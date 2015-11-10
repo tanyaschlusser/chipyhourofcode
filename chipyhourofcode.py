@@ -297,9 +297,9 @@ def register():
         if len(result) > 0 and 'confirmed' not in request.form:
             # This adult is already bringing someone with a different name.
             #  Let them do it if they click again.
-            flash("Please confirm that this adult "
-                  "is already bringing someone "
-                  "with a different name...")
+            flash("Click 'Register' again to confirm that this adult "
+                  "is also bringing someone else..."
+                  "(It's OK, we just want to make sure it's not a typo.)")
             return render_template(
                 'register.html',
                 attendee_data=attendee_data,
