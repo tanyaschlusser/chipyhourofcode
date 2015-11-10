@@ -135,7 +135,7 @@ def close_connection(exception):
     g._database = None
 
 
-def db_query(query, args=None, commit=False):
+def db_query(query, args=[], commit=False):
     """Perform a query returning the database cursor if success else None.
 
     Use db_select for SELECT queries.
@@ -150,7 +150,7 @@ def db_query(query, args=None, commit=False):
     return []
     
 
-def db_select(query, args=None, columns=None):
+def db_select(query, args=[], columns=None):
     """Return the result of a select query as an array of dictionaries.
 
     Each dictionary has keys taken from the 'columns' argument, or else
@@ -174,7 +174,7 @@ def db_select(query, args=None, columns=None):
     return [dict(zip(columns, result)) for result in results]
 
 
-def db_select_one(query, args=None, columns=None):
+def db_select_one(query, args=[], columns=None):
     """Return the one-row result of a select query as a dictionary.
 
         If there are more than one rows, return only the contents of the first one.
