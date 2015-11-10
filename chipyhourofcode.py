@@ -297,6 +297,7 @@ def register():
 @app.route("/confirmation/<uid>", methods=['GET', 'POST'])
 def confirmation(uid=None):
     if uid is None:
+        flash("We could not find your registration..please register:")
         return redirect(url_for('register'))
     if request.method == 'GET':
         # If rank is less than 20, they're in.
