@@ -28,12 +28,6 @@ with open(os.path.join(os.path.dirname(__file__), '.env')) as infile:
             k, v = line.strip().split('=',1)
             os.environ[k] = v
 
-## Local configuration settings -- database connection, passwords
-def connect_db():
-    engine = create_engine(os.environ['MYSQL_CONNECTION'])
-    return engine.connect()
-    
-
 ## Setup
 app = Flask(__name__)
 app.config["STATIC_DIR"] = os.path.join(
@@ -111,10 +105,15 @@ def send_confirmation(registration_details):
 
 
 ## ----------------------------------------- Database parts ----- ##
+def connect_db():
+    engine = create_engine(os.environ['MYSQL_CONNECTION'])
+    return engine.connect()
+    
+
 def get_db():
     """Set the flask 'g' value for _database, and return it."""
     db = getattr(g, "_database", None)
-    if db is None:
+    if not db:
         db = g._database = connect_db()
     return db
 
@@ -123,7 +122,7 @@ def get_db():
 def close_connection(exception):
     """Set the flask 'g' value for _database, and return it."""
     db = getattr(g, '_database', None)
-    if db is not None:
+    if db:
         db.close()
     g._database = None
 
@@ -135,13 +134,13 @@ def db_query(query, args=None, commit=False):
     Wrap the query with a try/except, catch the error, and return
     False if the query fails.
     """
+    result = None
     db = get_db()
-    #cur = db.cursor()
-    #cur.execute(query, args)
-    db.execute(query, args)
-    if commit:
-        db.commit()
-    return db
+    with db.begin() as connection:
+        with connection.begin() as trans:
+            result = db.execute(query, args)
+            trans.commit()
+    return result
     
 
 def db_select(query, args=None, columns=None):
@@ -158,9 +157,7 @@ def db_select(query, args=None, columns=None):
             We use the default format: SELECT * FROM TABLE WHERE col1 = '%s'
     """
     results = db_query(query, args=args) 
-    if results is None:
-        return None
-    if len(results) == 0:
+    if results is None or len(results) == 0:
         return None
     elif len(results[0]) > len(columns):
         columns = list(columns) + ["col%d" % i for i in range(len(columns),len(results))]
