@@ -261,7 +261,7 @@ def register():
         
         # Else add the person.
         parent = attendee_data['guardian_name'].strip()
-        attendee_data['unregister_uri'] = uid= "{}{}{}".format(
+        attendee_data['unregister_uri'] = uid = "{}{}{}".format(
                 int(time.time()*100),
                 parent[0],
                 parent[-1])
@@ -277,7 +277,7 @@ def register():
                        'unregister_uri')
                 ],
                 commit=True)
-        return redirect(url_for('confirmation', unregister_uri.split('/')[-1]))
+        return redirect(url_for('confirmation', uid)
 
 
 @app.route("/confirmation/<uid>", methods=['GET', 'POST'])
