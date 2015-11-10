@@ -277,7 +277,7 @@ def register():
                        'unregister_uri')
                 ],
                 commit=True)
-        return redirect(url_for('confirmation', uid)
+        return redirect(url_for('confirmation', uid))
 
 
 @app.route("/confirmation/<uid>", methods=['GET', 'POST'])
