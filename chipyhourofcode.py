@@ -134,13 +134,12 @@ def db_query(query, args=None, commit=False):
     Wrap the query with a try/except, catch the error, and return
     False if the query fails.
     """
-    result = None
     db = get_db()
     with db.begin() as connection:
         result = db.execute(query, args)
         if result and result.returns_rows:
             return [r for r in result.fetchall()]
-    return None
+    return []
     
 
 def db_select(query, args=None, columns=None):
