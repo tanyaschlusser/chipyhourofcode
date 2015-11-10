@@ -73,7 +73,10 @@ def send_waitlist(registration_details):
         ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
-    """.format(conf_uri=url_for('confirmation'), **registration_details)
+    """.format(conf_uri=url_for(
+                'confirmation',
+                uid=registration_details['unregister_uri']),
+            **registration_details)
     ))
 
 
@@ -100,7 +103,10 @@ def send_confirmation(registration_details):
         ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
-    """.format(conf_uri=url_for('confirmation'), **registration_details)
+    """.format(conf_uri=url_for(
+                'confirmation',
+                uid=registration_details['unregister_uri']),
+            **registration_details)
     ))
 
 
