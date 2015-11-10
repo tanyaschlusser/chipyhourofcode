@@ -376,6 +376,21 @@ def confirmation(uid=None):
         return render_template('confirmation.html', attendee_data=result)
     else:  # 'POST'
         if 'unregister' in request.form and request.form['unregister']:
+            result = db_select_one("""
+                 SELECT   attendee_name,
+                          guardian_email,
+                          guardian_name,
+                          unregister_uri
+                 FROM     attendee
+                WHERE unregister_uri = %s
+                """,
+                args=[uid],
+                columns=[
+                 "attendee_name",
+                 "guardian_email",
+                 "guardian_name",
+                 "unregister_uri"
+            ])
             db_query(
                 "DELETE FROM attendee WHERE unregister_uri = %s",
                 args = [uid],
