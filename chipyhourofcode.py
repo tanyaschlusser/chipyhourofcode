@@ -262,7 +262,7 @@ def register():
         attendee_data['unregister_uri'] = url_for(
             'confirmation',
             uid= "{}{}".format(
-                int(time.time()*100)
+                int(time.time()*100),
                 "".join(attendee_data.split())[-2:])
         )
         db_query("""
