@@ -137,10 +137,10 @@ def db_query(query, args=None, commit=False):
     result = None
     db = get_db()
     with db.begin() as connection:
-        with connection.begin() as trans:
-            result = db.execute(query, args)
-            trans.commit()
-    return result
+        result = db.execute(query, args)
+        if result and result.returns_rows:
+            return [r for r in result.fetchall()]
+    return None
     
 
 def db_select(query, args=None, columns=None):
@@ -261,12 +261,11 @@ def register():
             )
         
         # Else add the person.
-        attendee_data['unregister_uri'] = url_for(
-            'confirmation',
-            uid= "{}{}".format(
+        parent = attendee_data['guardian_name'].strip()
+        attendee_data['unregister_uri'] = uid= "{}{}{}".format(
                 int(time.time()*100),
-                "".join(attendee_data.split())[-2:])
-        )
+                parent[0],
+                parent[-1])
         db_query("""
                 INSERT INTO attendee
                 (attendee_name, guardian_email, guardian_name, unregister_uri)
