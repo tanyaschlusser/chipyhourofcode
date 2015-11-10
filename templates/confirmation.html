@@ -11,7 +11,7 @@
 
         <h1 class="site-title">
         <img src="../static/img/logo.png" style="vertical-align:text-bottom;width:2.5em;padding:0 0.5em;float:left;"></img>
-        <span id="event-title" style="vertical-align:middle">Registration Confirmation: ChiPy's Hour of Code</span> </h1>
+        <span id="event-title" style="vertical-align:middle">Confirmation - Hour of Code</span> </h1>
         <p class="site-description">
             See you December 13 for a fun intro to programming!
         </p>
@@ -20,8 +20,8 @@
       method="POST"
       onsubmit="return confirm('Really unregister?');"
       style="width:42em;margin-left:auto;margin-right:auto;">
-  <label>Student: {{ attendee_data.attendee_name }}</label>
-  <label>Adult: {{ attendee_data.guardian_name }}</label>
+  <label>{{ attendee_data.attendee_name }} (Student) and</label>
+  <label>{{ attendee_data.guardian_name }} (Grown-up)</label>
   <input type="hidden" name="unregister" value="True">
   <input type="submit" class="button register-button round-corners" value="Unregister" style="height:3.5em"></input>
 </form>
@@ -33,6 +33,7 @@
 {% if not attendee_data %}
   <h4>Successfully unregistered, thank you!</h4>
 {% elif attendee_data.rank and attendee_data.rank < 20 %}
+    <br/>
     <span class="addtocalendar atc-style-blue">
         <var class="atc_event">
             <var class="atc_date_start">2015-12-13 09:00:00</var>
