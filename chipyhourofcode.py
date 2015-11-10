@@ -378,5 +378,10 @@ def confirmation():
             return render_template('confirmation.html', attendee_data=None)
 
 
+# app.secret_key is used by flask.session to encrypt the cookies
+# (we need it for flash messages)
+app.secret_key = os.urandom(24)
+
+
 if __name__ == "__main__":
     app.run(debug=os.environ['DEBUG'])
