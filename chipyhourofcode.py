@@ -214,7 +214,7 @@ def register():
             guardian_name=None
         )
         for k in attendee_data.keys():
-            if k in request.form
+            if k in request.form:
                 attendee_data[k] = request.form[k]
         if None in attendee_data.values():
             return render_template(
