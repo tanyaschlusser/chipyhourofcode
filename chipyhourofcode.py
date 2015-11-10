@@ -142,15 +142,13 @@ def send_waitlist(registration_details):
 ## ----------------------------------------- Database parts ----- ##
 def connect_db():
     engine = create_engine(os.environ['MYSQL_CONNECTION'])
-    return engine.connect()
+    return engine
     
 
 def get_db():
     """Set the flask 'g' value for _database, and return it."""
     db = getattr(g, "_database", None)
     if not db:
-        if db is not None:
-            db.close()
         db = g._database = connect_db()
     return db
 
@@ -171,14 +169,13 @@ def db_query(query, args=[], commit=False):
     Wrap the query with a try/except, catch the error, and return
     False if the query fails.
     """
-    db = get_db()
     all_results = []
-    with db.begin() as connection:
-        result = db.execute(query, args)
-        if result and result.returns_rows:
-            all_results = [r for r in result.fetchall()]
-    db.close()
-    g._database = None
+    db = get_db()
+    con = db.connect()
+    result = con.execute(query, args)
+    if result and result.returns_rows:
+        all_results = [r for r in result.fetchall()]
+    con.close()
     return all_results
     
 
@@ -202,7 +199,6 @@ def db_select(query, args=[], columns=None):
         columns = list(columns) + ["col%d" % i for i in range(len(columns),len(results))]
     elif len(results[0]) < len(columns):
         columns = columns[0:len(results[0])]
-
     return [dict(zip(columns, result)) for result in results]
 
 
