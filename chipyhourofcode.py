@@ -226,8 +226,14 @@ def register():
         # Check whether already registered.
         #  if so, flash 'already registered. tounregister go here: <>'
         #  else, check whether email exists for another registrant.
-        result = db_select(
-                "SELECT * FROM attendee WHERE guardian_email = %s;",
+        result = db_select("""
+                SELECT attendee_name,
+                    guardian_email,
+                    guardian_name,
+                    unregister_uri,
+                    registration_timestamp
+                FROM attendee WHERE guardian_email = %s;
+                """,
                 args=[attendee_data['guardian_email']],
                 columns=[
                     'attendee_name',
@@ -258,7 +264,6 @@ def register():
                          "is already bringing someone "
                          "with a different name...")
             )
-        
         # Else add the person.
         parent = attendee_data['guardian_name'].strip()
         attendee_data['unregister_uri'] = uid = "{}{}{}".format(
