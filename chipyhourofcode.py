@@ -218,6 +218,7 @@ def register():
             if k in request.form:
                 attendee_data[k] = request.form[k]
         if None in attendee_data.values():
+            flash('Missing data...we need everything, please.')
             return render_template(
                 'register.html',
                 attendee_data=attendee_data,
@@ -245,16 +246,13 @@ def register():
         if len(result) > 0:
             for row in result:
                 if row['attendee_name'] == attendee_data['attendee_name']:
-                    flash("""
-                        We think you have already registered...
-                        (<a href='{}'>Confirmation</a>)
-                    """.format(
-                    url_for('confirmation', uid=row['unregister_uri'])
-                    ))
+                    flash("We think you have already registered...")
                     return render_template(
                         'register.html',
                         attendee_data=attendee_data,
-                        error="We think you have already registered..."
+                        confirmation_link=url_for(
+                            "confirmation",
+                            uid=row['unregister_uri'])
                     )
         elif len(result) > 0 and 'confirmed' not in request.form:
             # This adult is already bringing someone with a different name.
@@ -265,9 +263,7 @@ def register():
             return render_template(
                 'register.html',
                 attendee_data=attendee_data,
-                confirm=("Please confirm that this adult "
-                         "is already bringing someone "
-                         "with a different name...")
+                get_confirmation=True
             )
         # Else add the person.
         parent = attendee_data['guardian_name'].strip()

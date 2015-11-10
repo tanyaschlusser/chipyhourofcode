@@ -19,6 +19,9 @@
     <span id="flash_container" class=flashes>
       {# Filled using 'doFlashes()' below. #}
     </span>
+    {% if confirmation_link %}
+    <a href="{{ confirmation_link }}">(Confirmation link)</a>
+    {% endif %}
 
 <form id="registrationForm" method="POST" style="width:42em;margin-left:auto;margin-right:auto;">
   <label for="attendee_name">Student's name</label>
@@ -61,6 +64,9 @@
          required="required"
          size=24
          style="width:24em"></input>
+  {% if get_confirmation %}
+    <input type="hidden" name="confirmed" value="True">
+  {% endif %}
   <input type="submit" id="register" class="button register-button round-corners" name="register" value="Register" style="height:3.5em"></input>
 </form>
 
