@@ -10,9 +10,12 @@ CREATE TABLE IF NOT EXISTS attendee (
   attendee_name varchar(64),
   guardian_email varchar(64),
   guardian_name varchar(64),
+  unregister_uri varchar(64),
+  sent_confirmation boolean NOT NULL DEFAULT FALSE,
+  sent_waitlist boolean NOT NULL DEFAULT FALSE,
   registration_timestamp timestamp NOT NULL DEFAULT current_timestamp,
-  PRIMARY KEY (id)
-  UNIQUE INDEX child_guardian_pair (attendee_name, guardian_email);
+  PRIMARY KEY (id),
+  UNIQUE INDEX child_guardian_pair (attendee_name, guardian_email)
 );
 
 CREATE TABLE IF NOT EXISTS volunteer (
