@@ -54,32 +54,6 @@ def send_email(registration_details, msg):
     server.close()
 
 
-def send_waitlist(registration_details):
-    send_email(
-        registration_details,
-        MIMEText("""
-        You are on the waitlist for the Hour of Code
-        hosted by ChiPy and Programming for Biologists at Northwestern:
-        
-        {attendee_name}
-        and
-        {guardian_name}
-
-        We will send a confirmation email if you get off the wait list.
-       
-        If your plans change, please make room for others...
-        Unregister at: {conf_uri}/{unregister_uri}
-        
-        ❤
-        ChiPy - the Chicago Python User Group
-        and me, Tanya (organizing the event)
-    """.format(conf_uri=url_for(
-                'confirmation',
-                uid=registration_details['unregister_uri']),
-            **registration_details)
-    ))
-
-
 def send_confirmation(registration_details):
     send_email(
         registration_details,
@@ -108,6 +82,56 @@ def send_confirmation(registration_details):
                 uid=registration_details['unregister_uri']),
             **registration_details)
     ))
+
+
+def send_unregister(registration_details):
+    send_email(
+        registration_details,
+        MIMEText("""
+        You have successfully unregistered for the Hour of Code
+        hosted by ChiPy and Programming for Biologists at Northwestern:
+        
+        {attendee_name}
+        and
+        {guardian_name}
+
+        We have deleted your information. Thank you!
+        
+        ❤
+        ChiPy - the Chicago Python User Group
+        and me, Tanya (organizing the event)
+    """.format(conf_uri=url_for(
+                'confirmation',
+                uid=registration_details['unregister_uri']),
+            **registration_details)
+    ))
+
+
+def send_waitlist(registration_details):
+    send_email(
+        registration_details,
+        MIMEText("""
+        You are on the waitlist for the Hour of Code
+        hosted by ChiPy and Programming for Biologists at Northwestern:
+        
+        {attendee_name}
+        and
+        {guardian_name}
+
+        We will send a confirmation email if you get off the wait list.
+       
+        If your plans change, please make room for others...
+        Unregister at: {conf_uri}/{unregister_uri}
+        
+        ❤
+        ChiPy - the Chicago Python User Group
+        and me, Tanya (organizing the event)
+    """.format(conf_uri=url_for(
+                'confirmation',
+                uid=registration_details['unregister_uri']),
+            **registration_details)
+    ))
+
 
 
 ## ----------------------------------------- Database parts ----- ##
@@ -356,38 +380,41 @@ def confirmation(uid=None):
                 "DELETE FROM attendee WHERE unregister_uri = %s",
                 args = [uid],
                 commit=True)
-        # Check for new rank < 20
-        changes = db_select("""
-             SELECT   attendee_name,
-                      guardian_email,
-                      guardian_name,
-                      unregister_uri
-             FROM
-            (SELECT   attendee_name,
-                      guardian_email,
-                      guardian_name,
-                      unregister_uri,
-                      sent_confirmation,
-                      sent_waitlist,
-                      @curRank := @curRank + 1 AS rank
-             FROM     attendee, (SELECT @curRank := 0) r
-             ORDER BY registration_timestamp
-            ) AS a
-            WHERE rank < 20 AND sent_confirmation = FALSE
-            """,
-            columns=[
-             "attendee_name",
-             "guardian_email",
-             "guardian_name",
-             "unregister_uri"
-        ])
-        for change in changes:
-            send_confirmation(change)
-            db_query("UPDATE attendee SET sent_confirmation = TRUE "
-                     "WHERE unregister_uri = %s;",
-                     args=[change['unregister_uri']],
-                     commit=True)
-            return render_template('confirmation.html', attendee_data=None)
+            send_unregister(result)
+            # Check for new rank < 20 and email them that they're in
+            changes = db_select("""
+                 SELECT   attendee_name,
+                          guardian_email,
+                          guardian_name,
+                          unregister_uri
+                 FROM
+                (SELECT   attendee_name,
+                          guardian_email,
+                          guardian_name,
+                          unregister_uri,
+                          sent_confirmation,
+                          sent_waitlist,
+                          @curRank := @curRank + 1 AS rank
+                 FROM     attendee, (SELECT @curRank := 0) r
+                 ORDER BY registration_timestamp
+                ) AS a
+                WHERE rank < 20 AND sent_confirmation = FALSE
+                """,
+                columns=[
+                 "attendee_name",
+                 "guardian_email",
+                 "guardian_name",
+                 "unregister_uri"
+            ])
+            for change in changes:
+                send_confirmation(change)
+                db_query("UPDATE attendee SET sent_confirmation = TRUE "
+                         "WHERE unregister_uri = %s;",
+                         args=[change['unregister_uri']],
+                         commit=True)
+            result = None
+        # Either confirm the registration or unregistration.
+        return render_template('confirmation.html', attendee_data=result)
 
 
 # app.secret_key is used by flask.session to encrypt the cookies
