@@ -136,8 +136,9 @@ def db_query(query, args=None, commit=False):
     False if the query fails.
     """
     db = get_db()
-    cur = db.cursor()
-    cur.execute(query, args)
+    #cur = db.cursor()
+    #cur.execute(query, args)
+    db.execute(query, args)
     if commit:
         db.commit()
     return cur
