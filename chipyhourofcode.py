@@ -249,7 +249,7 @@ def register():
                         We think you have already registered...
                         (<a href='{}'>Confirmation</a>)
                     """.format(
-                    url_for('confirmation', uid=result['unregister_uri'])
+                    url_for('confirmation', uid=row['unregister_uri'])
                     ))
                     return render_template(
                         'register.html',
