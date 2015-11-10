@@ -7,12 +7,15 @@ The pages to make are:
     /about
     /location
     /register
-    /register/<id>
+    /confirmation/<id>
     /
 """
 import os
-#from sqlalchemy import create_engine  # MySQL 5.5.42
-import sqlite3
+import smtplib
+import time
+from email.mime.text import MIMEText
+
+from sqlalchemy import create_engine  # MySQL 5.5.42
 
 from flask import flash, Flask, g, jsonify
 from flask import redirect, render_template, request, url_for
@@ -21,9 +24,8 @@ from jinja2 import Environment, Template
 
 ## Local configuration settings -- database connection, passwords
 def connect_db():
-    #engine = create_engine(os.environ['MYSQL_CONNECTION'])
-    #return engine.connect()
-    conn = sqlite3.connect("reservations.db")
+    engine = create_engine(os.environ['MYSQL_CONNECTION'])
+    return engine.connect()
     
 
 ## Setup
@@ -32,9 +34,74 @@ app.config["STATIC_DIR"] = os.path.join(
             os.path.dirname(os.path.realpath(__file__)),
             'static')
 app.config["SPEAKER_DIR"] = "img/speakers/"
-app.config["SPONSOR_DIR"] = "imag/sponsors/"
+app.config["SPONSOR_DIR"] = "img/sponsors/"
 
 env = Environment()
+
+
+## -------------------------------------------- Email parts ----- ##
+def send_email(registration_details, msg):
+    server = smtplib.SMTP('smtp.gmail.com:587')
+    server.ehlo()
+    server.starttls()
+    server.login(os.environ['GMAILU'], os.environ['GMAILP'])
+    mailfrom = os.environ['GMAILU']
+    mailto = registration_details['guardian_email']
+    msg['Subject'] = 'Confirmation: ChiPy Hour of Code'
+    msg['From'] = mailfrom
+    msg['To'] = mailto
+    server.sendmail(mailfrom, mailto, msg.as_string())
+    server.close()
+
+
+def send_waitlist(registration_details):
+    send_email(
+        registration_details,
+        MIMEText("""
+        You are on the waitlist for the Hour of Code
+        hosted by ChiPy and Programming for Biologists at Northwestern:
+        
+        {attendee_name}
+        and
+        {guardian_name}
+
+        We will send a confirmation email if you get off the wait list.
+       
+        If your plans change, please make room for others...
+        Unregister at: {conf_uri}/{unregister_uri}
+        
+        ❤
+        ChiPy - the Chicago Python User Group
+        and me, Tanya (organizing the event)
+    """.format(conf_uri=url_for('confirmation'), **registration_details)
+    ))
+
+
+def send_confirmation(registration_details):
+    send_email(
+        registration_details,
+        MIMEText("""
+        You are confirmed to come to the Hour of Code
+        hosted by ChiPy and Programming for Biologists at Northwestern:
+        
+        {attendee_name}
+        and
+        {guardian_name}
+       
+        If your plans change, please make room for others...
+        Unregister at: {conf_uri}/{unregister_uri}
+
+             Saturday 13 December 2015
+                    9am - 11am
+            Feinberg School of Medicine
+              laptop|tablet|smartphone
+             preferred but not required
+        
+        ❤
+        ChiPy - the Chicago Python User Group
+        and me, Tanya (organizing the event)
+    """.format(conf_uri=url_for('confirmation'), **registration_details)
+    ))
 
 
 ## ----------------------------------------- Database parts ----- ##
@@ -110,151 +177,6 @@ def db_select_one(query, args=None, columns=None):
     return rows[0]
 
 
-## ------------------------------------ False RESTful parts ----- ##
-# This section will later be moved to a module devoted to serving
-# a RESTful API. It will be replaced by modified versions of
-# get_rest() and post_rest(), which will query the RESTful API
-# rather than send off to different functions here.
-#
-# The functions all take key,value pairs (**kwargs)
-# and return dictionaries that could be converted to valid JSON
-def delete_nulls_arr(a):
-    map(lambda row:[row.pop(k) for k in row.keys() if row[k] is None], a)
-
-def delete_nulls_dict(d):
-    [d.pop(k) for k in d.keys() if d[k] is None]
-
-
-def get_profile(nickname="", **kwargs):
-    update = {}
-    result = dict(error = None,
-        nickname=nickname,
-        avatar="default.png" )
-
-    if nickname != "" and nickname is not None:
-        update = db_select_one("""
-                SELECT nickname, avatar, first_name, last_name,
-                       to_char(start_date, 'Month YYYY') AS start_date
-                FROM user_details
-                WHERE nickname = %s;""",
-                args=[nickname],
-                columns=["nickname", "avatar",
-                    "first_name", "last_name", "start_date"])
-
-        update['recommended_by_list'] = db_select(
-                """SELECT
-                    app_name, icon,
-                    recipient_nickname AS name
-                   FROM recommendation_view
-                    WHERE recommender_nickname = %s;""",
-                args=[nickname],
-                columns=["app", "icon", "name"])    
-
-        update['recommended_to_list'] = db_select(
-                """SELECT
-                    app_name, icon,
-                    recommender_nickname AS name
-                   FROM recommendation_view
-                    WHERE recipient_nickname = %s;""",
-                args=[nickname],
-                columns=["app", "icon", "name"])
-
-        update['review_list'] = db_select(
-                """SELECT
-                app_name, icon, review_date, review
-                FROM user_details AS ud
-                JOIN app_review AS ar
-                    ON ar.user_id = ud.user_id
-                JOIN app
-                    ON ar.app_id = app.app_id
-                WHERE ud.nickname = %s;""",
-                args=[nickname],
-                columns=["app", "icon", "review_date", "review"])
-
-        delete_nulls_dict(update)
-    result.update(update)
-    return result
-
-
-def get_rest(path, query={}):
-    """To be replaced by a query to a RESTful API later."""
-    apis = {
-        "apps": get_apps,
-        "login": get_login,
-        "profile": get_profile}
-    if path in apis:
-        print "(Get) Query:", query
-        result = apis[path](**query)
-        if isinstance(result, dict):
-            delete_nulls_dict(result)
-        print "(Get) Result:", result
-        import sys
-        sys.stdout.flush()
-        return result
-    else:
-        return None
-
-
-def post_login(nickname=None, **kwargs):
-    result = {}
-    if nickname is None:
-        result["error"]["nickname"] = "No user name given."
-    else:
-        db_query("INSERT INTO user_details (nickname) VALUES (%s)",
-                 args=[nickname.lower()],
-                 commit=True)
-        result = db_select_one("""
-                SELECT nickname, user_id, avatar
-                FROM user_details WHERE nickname=%s;
-                """,
-                args=[nickname.lower()],
-                columns=["nickname", "user_id", "avatar"])
-        if len(result) == 0:
-            result = {"error": "Odd, we just inserted the name."}
-    return result
-
-
-def post_profile(nickname=None, **kwargs):
-    """Update the user's profile.
-
-    kwargs should contain first_name, last_name, image.
-    Image is right now (Dec 2014) a werkzeug.datastructures.FileStorage
-    object but should be converted for send/receive via RESTful API
-    """
-    if nickname != None:
-        result = db_select_one(
-                "SELECT user_id FROM user_details WHERE nickname = %s;",
-                args=[nickname],
-                columns=["user_id"])
-        if result is not None:
-            user_id = result["user_id"]
-            if "avatar" in kwargs:
-                avatar = "avatar_%d.jpg" % user_id
-                kwargs['avatar'].save(os.path.join(
-                    app.config['STATIC_DIR'],
-                    app.config['AVATAR_DIR'],
-                    avatar))
-                kwargs['avatar'] = avatar
-
-            QUERY = "UPDATE user_details SET {QUERY_TEXT} WHERE user_id=%d;" % user_id
-            query_keys = ('first_name', 'last_name', 'avatar')
-            query_text = ", ".join(("{k}=%s".format(k=k) for k in query_keys
-                                    if k in kwargs))
-            query_data =  [kwargs[k] for k in query_keys if k in kwargs]
-    
-            cur = db_query(QUERY.format(QUERY_TEXT=query_text),
-                     args=query_data,
-                     commit=True)
-
-            if cur is not None:
-                result = {"success" : True}
-        else:
-            result = {"error": "Username not found."}
-    else:      
-        result = {"error": "Username not given."}
-    return result
-            
-
 
 ## ---------------------------------------------- Web parts ----- ##
 @app.route("/")
@@ -275,7 +197,7 @@ def location():
     return render_template('location.html')
 
 
-@app.route("/register/", methods=['GET', 'POST'])
+@app.route("/register/", methods=['GET', 'POST'], strict_slashes=False)
 def register():
     """Allow people to add/delete/change themselves.
 
@@ -285,59 +207,170 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
     elif request.method == 'POST':
-        print("Post to the DB here then render the confirmation")
-        return redirect(url_for('confirmation', uid=uid))
+        # Check whether form is filled 
+        attendee_data = dict(
+            attendee_name=None,
+            guardian_email=None,
+            guardian_name=None
+        )
+        for k in attendee_data.keys():
+            if k in request.form
+                attendee_data[k] = request.form[k]
+        if None in attendee_data.values():
+            return render_template(
+                'register.html',
+                attendee_data=attendee_data,
+                error='Missing data...we need everything, please.'
+            )
+        # Check whether already registered.
+        #  if so, flash 'already registered. tounregister go here: <>'
+        #  else, check whether email exists for another registrant.
+        result = db_select(
+                "SELECT * FROM attendee WHERE guardian_email = %s;",
+                args=[attendee_data['guardian_email']],
+                columns=[
+                    'attendee_name',
+                    'guardian_email',
+                    'guardian_name',
+                    'unregister_uri',
+                    'registration_timestamp'
+                ])
+        if len(result) > 0:
+            for row in result:
+                if row['attendee_name'] == attendee_data['attendee_name']:
+                    flash('We think you have already registered...')
+                    return render_template(
+                        'register.html',
+                        attendee_data=attendee_data,
+                        error="We think you have already registered..."
+                    )
+        elif len(result) > 0 and 'confirmed' not in request.form:
+            # This adult is already bringing someone with a different name.
+            #  Let them do it if they click again.
+            flash("Please confirm that this adult "
+                  "is already bringing someone "
+                  "with a different name...")
+            return render_template(
+                'register.html',
+                attendee_data=attendee_data,
+                confirm=("Please confirm that this adult "
+                         "is already bringing someone "
+                         "with a different name...")
+            )
+        
+        # Else add the person.
+        attendee_data['unregister_uri'] = url_for(
+            'confirmation',
+            uid= "{}{}".format(
+                int(time.time()*100)
+                "".join(attendee_data.split())[-2:])
+        )
+        db_query("""
+                INSERT INTO attendee
+                (attendee_name, guardian_email, guardian_name, unregister_uri)
+                VALUES (%s, %s, %s, %s)
+                """,
+                args=[attendee_data[k] for k in
+                      ('attendee_name',
+                       'guardian_email',
+                       'guardian_name',
+                       'unregister_uri')
+                ],
+                commit=True)
+        return redirect(url_for('confirmation', unregister_uri.split('/')[-1]))
 
 
-@app.route("/confirmation/<uid>")
+@app.route("/confirmation/<uid>", methods=['GET', 'POST'])
 def confirmation():
-    result = {}
-    if request.method == 'POST':
-        query = {}
-        if 'nickname' in request.form:
-            query['nickname'] = request.form['nickname']
-            result = get_rest("login", query=query)
-            if "create" in request.form:
-                if "error" not in result:
-                    # The nickname is in use already
-                    result = {
-                        "error":
-                        "Sorry, cannot create username -- already in use."}
-                else:
-                    # Then the nickname is available for use. Create it.
-                    result = post_rest("login", query=query)
-                    result["created"] = "true"
-            else:  # login
-                # is there  an error?
-                print "Result for 'login':", result
-        else:
-           result["error"] = "No user id entered."
-
-        print "RESULT:", result
-        if "user_id" in result:
-            flash('Login successful')
-            
-        return jsonify(**result)
-
-    elif request.method == 'GET':
-        return render_template('login.html')
-
-
-@app.route("/modify/<uid>", methods=['GET', 'POST'])
-def modify(uid=None):
-    # Fetch the uid and render
-    if uid is None:
-        flash('No registration ID given -- try signing up')
-        redirect(url_for('register'))
     if request.method == 'GET':
-        print("Get the data and render the form filled with"
-                "flash message that they're already registered")
-        return("Placeholder -- get {}".format(uid))
-    else:
-        print("Modify the db. If unregistering flash the message"
-                "that they've successfully unregistered")
-        flash('Successfully modified. Thank you!')
-        return("Placeholder -- post {}".format(uid))
+        # If rank is less than 20, they're in.
+        result = db_select_one("""
+             SELECT   attendee_name,
+                      guardian_email,
+                      guardian_name,
+                      unregister_uri,
+                      sent_confirmation,
+                      sent_waitlist,
+                      rank
+             FROM
+            (SELECT   attendee_name,
+                      guardian_email,
+                      guardian_name,
+                      unregister_uri,
+                      sent_confirmation,
+                      sent_waitlist,
+                      @curRank := @curRank + 1 AS rank
+             FROM     attendee, (SELECT @curRank := 0) r
+             ORDER BY registration_timestamp
+            ) AS a
+            WHERE unregister_uri = %s
+            """,
+            args=[uid],
+            columns=[
+               "attendee_name",
+               "guardian_email",
+               "guardian_name",
+               "unregister_uri",
+               "sent_confirmation",
+               "sent_waitlist",
+               "rank"
+        ])
+        if result['rank'] < 20 and not result['sent_confirmation']:
+            # Send confirmation email.
+            send_confirmation(result)
+            flash('Sent confirmation email')
+            db_query("UPDATE attendee SET sent_confirmation = TRUE "
+                     "WHERE unregister_uri = %s;",
+                     args=[uid],
+                     commit=True)
+        elif result['rank'] >= 20 and not result['sent_waitlist']:
+            # Else send waitlist email.
+            send_waitlist(result)
+            flash('Sent waitlist email')
+            db_query("UPDATE attendee SET sent_waitlist = TRUE "
+                     "WHERE unregister_uri = %s;",
+                     args=[uid],
+                     commit=True)
+        # Display the result
+        return render_template('confirmation.html', attendee_data=result)
+    else:  # 'POST'
+        if 'unregister' in request.form and request.form['unregister']:
+            db_query(
+                "DELETE FROM attendee WHERE unregister_uri = %s",
+                args = [uid],
+                commit=True)
+        # Check for new rank < 20
+        changes = db_select("""
+             SELECT   attendee_name,
+                      guardian_email,
+                      guardian_name,
+                      unregister_uri
+             FROM
+            (SELECT   attendee_name,
+                      guardian_email,
+                      guardian_name,
+                      unregister_uri,
+                      sent_confirmation,
+                      sent_waitlist,
+                      @curRank := @curRank + 1 AS rank
+             FROM     attendee, (SELECT @curRank := 0) r
+             ORDER BY registration_timestamp
+            ) AS a
+            WHERE rank < 20 AND sent_confirmation = FALSE
+            """,
+            columns=[
+             "attendee_name",
+             "guardian_email",
+             "guardian_name",
+             "unregister_uri"
+        ])
+        for change in changes:
+            send_confirmation(change)
+            db_query("UPDATE attendee SET sent_confirmation = TRUE "
+                     "WHERE unregister_uri = %s;",
+                     args=[change['unregister_uri']],
+                     commit=True)
+            return render_template('confirmation.html', attendee_data=None)
 
 
 if __name__ == "__main__":
