@@ -141,7 +141,7 @@ def db_query(query, args=None, commit=False):
     db.execute(query, args)
     if commit:
         db.commit()
-    return cur
+    return db
     
 
 def db_select(query, args=None, columns=None):
@@ -157,11 +157,9 @@ def db_select(query, args=None, columns=None):
             parameterized query.
             We use the default format: SELECT * FROM TABLE WHERE col1 = '%s'
     """
-    cur = db_query(query, args=args) 
-    if cur is None:
+    results = db_query(query, args=args) 
+    if results is None:
         return None
-    results = cur.fetchall()
-    cur.close()
     if len(results) == 0:
         return None
     elif len(results[0]) > len(columns):
