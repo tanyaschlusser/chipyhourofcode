@@ -245,7 +245,12 @@ def register():
         if len(result) > 0:
             for row in result:
                 if row['attendee_name'] == attendee_data['attendee_name']:
-                    flash('We think you have already registered...')
+                    flash("""
+                        We think you have already registered...
+                        (<a href='{}'>Confirmation</a>)
+                    """.format(
+                    url_for('confirmation', uid=result['unregister_uri'])
+                    ))
                     return render_template(
                         'register.html',
                         attendee_data=attendee_data,
@@ -286,7 +291,9 @@ def register():
 
 
 @app.route("/confirmation/<uid>", methods=['GET', 'POST'])
-def confirmation():
+def confirmation(uid=None):
+    if uid is None:
+        return redirect(url_for('register'))
     if request.method == 'GET':
         # If rank is less than 20, they're in.
         result = db_select_one("""
