@@ -27,7 +27,7 @@
          maxlength=48
          id="attendee_name"
          name="attendee_name"
-        {% if attendee_data is None %}
+        {% if attendee_data is none %}
           placeholder="(First and last name)"
         {% elif attendee_data.attendee_name %}
           value="{{ attendee_data.attendee_name }}"
@@ -40,7 +40,7 @@
          maxlength=54
          id="guardian_email"
          name="guardian_email"
-        {% if attendee_data is None %}
+        {% if attendee_data is none %}
           placeholder="(Parent or guardian's email)"
         {% elif attendee_data.guardian_email %}
           value="{{ attendee_data.guardian_email }}"
@@ -53,7 +53,7 @@
          maxlength=48
          id="guardian_name"
          name="guardian_name"
-        {% if attendee_data is None %}
+        {% if attendee_data is none %}
           placeholder="(Parent or guardian's name)"
         {% elif attendee_data.guardian_name %}
           value="{{ attendee_data.guardian_name }}"
