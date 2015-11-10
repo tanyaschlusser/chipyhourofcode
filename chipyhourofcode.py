@@ -40,14 +40,17 @@ env = Environment()
 
 
 ## -------------------------------------------- Email parts ----- ##
-def send_email(registration_details, msg):
+def send_email(
+        registration_details,
+        msg,
+        subject='Confirmation: ChiPy Hour of Code'):
     server = smtplib.SMTP('smtp.gmail.com:587')
     server.ehlo()
     server.starttls()
     server.login(os.environ['GMAILU'], os.environ['GMAILP'])
     mailfrom = os.environ['GMAILU']
     mailto = registration_details['guardian_email']
-    msg['Subject'] = 'Confirmation: ChiPy Hour of Code'
+    msg['Subject'] = subject
     msg['From'] = mailfrom
     msg['To'] = mailto
     server.sendmail(mailfrom, mailto, msg.as_string())
@@ -77,7 +80,7 @@ def send_confirmation(registration_details):
         ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
-    """.format(conf_uri=url_for(
+        """.format(conf_uri=url_for(
                 'confirmation',
                 uid=registration_details['unregister_uri']),
             **registration_details)
@@ -100,11 +103,12 @@ def send_unregister(registration_details):
         ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
-    """.format(conf_uri=url_for(
+        """.format(conf_uri=url_for(
                 'confirmation',
                 uid=registration_details['unregister_uri']),
             **registration_details)
-    ))
+        ),
+        subject='Unregistration Confirmed: ChiPy Hour of Code')
 
 
 def send_waitlist(registration_details):
@@ -126,11 +130,12 @@ def send_waitlist(registration_details):
         ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
-    """.format(conf_uri=url_for(
+        """.format(conf_uri=url_for(
                 'confirmation',
                 uid=registration_details['unregister_uri']),
             **registration_details)
-    ))
+        ),
+        subject='Waitlist Confirmation: ChiPy Hour of Code')
 
 
 
