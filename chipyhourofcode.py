@@ -158,7 +158,7 @@ def close_connection(exception):
     """Set the flask 'g' value for _database, and return it."""
     db = getattr(g, '_database', None)
     if db:
-        db.close()
+        db.dispose()
     g._database = None
 
 
