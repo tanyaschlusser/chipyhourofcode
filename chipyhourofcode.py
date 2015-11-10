@@ -294,7 +294,7 @@ def register():
                             "confirmation",
                             uid=row['unregister_uri'])
                     )
-        elif len(result) > 0 and 'confirmed' not in request.form:
+        if len(result) > 0 and 'confirmed' not in request.form:
             # This adult is already bringing someone with a different name.
             #  Let them do it if they click again.
             flash("Please confirm that this adult "
