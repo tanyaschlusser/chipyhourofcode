@@ -22,7 +22,7 @@ from flask import redirect, render_template, request, url_for
 from flask.views import MethodView
 from jinja2 import Environment, Template
 
-with open(os.path.join(os.path.basename(__file__), '.env')) as infile:
+with open(os.path.join(os.path.dirname(__file__), '.env')) as infile:
     for line in infile:
         if not line.startswith('#'):
             k, v = line.strip().split('=',1)
