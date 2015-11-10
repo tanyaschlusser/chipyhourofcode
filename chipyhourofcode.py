@@ -157,7 +157,7 @@ def db_select(query, args=None, columns=None):
     """
     results = db_query(query, args=args) 
     if results is None or len(results) == 0:
-        return None
+        return []
     elif len(results[0]) > len(columns):
         columns = list(columns) + ["col%d" % i for i in range(len(columns),len(results))]
     elif len(results[0]) < len(columns):
