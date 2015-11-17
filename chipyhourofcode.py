@@ -119,6 +119,8 @@ def send_waitlist(registration_details):
         and
         {guardian_name}
 
+        Waitlist position: {position}
+
         We will send a confirmation email if you get off the wait list.
        
         If your plans change, please make room for others...
@@ -130,6 +132,7 @@ def send_waitlist(registration_details):
         """.format(conf_uri=url_for(
                 'confirmation',
                 uid=registration_details['unregister_uri']),
+            position=registration_details['rank']-19,
             **registration_details)
         ),
         subject='Waitlist Confirmation: ChiPy Hour of Code')
