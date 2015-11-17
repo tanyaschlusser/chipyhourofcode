@@ -174,7 +174,9 @@ def db_query(query, args=[], commit=False):
     con = db.connect()
     result = con.execute(query, args)
     if result and result.returns_rows:
-        all_results = [r for r in result.fetchall() if r is not None]
+        all_results = [
+            [elem.decode('utf-8') for elem in r]
+            for r in result.fetchall() if r is not None]
     con.close()
     return all_results
     
