@@ -77,7 +77,7 @@ def send_confirmation(registration_details):
               laptop|tablet|smartphone
              preferred but not required
         
-        ❤
+        ♡
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
         """.format(conf_uri=url_for(
@@ -100,7 +100,7 @@ def send_unregister(registration_details):
 
         We have deleted your information. Thank you!
         
-        ❤
+        ♡
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
         """.format(**registration_details)
@@ -190,7 +190,7 @@ def db_select(query, args=[], columns=[]):
             We use the default format: SELECT * FROM TABLE WHERE col1 = '%s'
     """
     results = db_query(query, args=args) 
-    if results is None or len(results) == 0 or results[0] is None:
+    if results is None or len(results) == 0:
         return []
     elif len(results[0]) > len(columns):
         columns = list(columns) + ["col%d" % i for i in range(len(columns),len(results))]
@@ -199,7 +199,7 @@ def db_select(query, args=[], columns=[]):
     return [dict(zip(columns, result)) for result in results]
 
 
-def db_select_one(query, args=[], columns=None):
+def db_select_one(query, args=[], columns=[]):
     """Return the one-row result of a select query as a dictionary.
 
         If there are more than one rows, return only the contents of the first one.
