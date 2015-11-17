@@ -110,7 +110,7 @@ p:last-of-type {
 }
 
 .section-title {
-    margin-bottom: 1.5em;
+    /* margin-bottom: 1.5em; */
     font-weight: bold;
     color: #fff;
     text-transform: uppercase;
@@ -524,8 +524,7 @@ SPONSORS LIST
     background-color: #fff;
     overflow: auto;
     padding-bottom: 0;
-    padding-top: 1em;
-    padding-top: 0;
+    padding-top: 3em;
     position: relative;
     clear: both;
 }
