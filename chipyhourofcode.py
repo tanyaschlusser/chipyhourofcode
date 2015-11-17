@@ -176,7 +176,7 @@ def db_query(query, args=[], commit=False):
     return all_results
     
 
-def db_select(query, args=[], columns=None):
+def db_select(query, args=[], columns=[]):
     """Return the result of a select query as an array of dictionaries.
 
     Each dictionary has keys taken from the 'columns' argument, or else
@@ -190,7 +190,7 @@ def db_select(query, args=[], columns=None):
             We use the default format: SELECT * FROM TABLE WHERE col1 = '%s'
     """
     results = db_query(query, args=args) 
-    if results is None or len(results) == 0 or results[0] is None:
+    if results is None or len(results) == 0:
         return []
     elif len(results[0]) > len(columns):
         columns = list(columns) + ["col%d" % i for i in range(len(columns),len(results))]
