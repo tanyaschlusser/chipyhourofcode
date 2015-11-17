@@ -11,7 +11,13 @@
 
         <h1 class="site-title">
         <img src="../static/img/logo.png" style="vertical-align:text-bottom;width:2.5em;padding:0 0.5em;float:left;"></img>
-        <span id="event-title" style="vertical-align:middle">Register for ChiPy's Hour of Code</span> </h1>
+        <span id="event-title" style="vertical-align:middle">Register for ChiPy's Hour of Code</span> 
+  {% if remaining > 0 %}
+   ({{ remaining }} spots left)
+  {% else %}
+   (join the wait list -- {{ 19 - remaining }} spots long)
+  {% endif %}
+</h1>
         <p class="site-description">
             Join other students aged 5-10 for a fun intro to programming!
         </p>
