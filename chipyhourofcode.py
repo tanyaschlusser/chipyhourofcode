@@ -236,6 +236,8 @@ def about():
                     'name',
                     'bio'
                 ]) 
+    for r in result:
+        r['headshot'] = url_for('static', filename='img/speakers/{}'.format(r['headshot']))
     return render_template('about.html', volunteers=result)
 
 
