@@ -190,7 +190,7 @@ def db_select(query, args=[], columns=None):
             We use the default format: SELECT * FROM TABLE WHERE col1 = '%s'
     """
     results = db_query(query, args=args) 
-    if results is None or len(results) == 0:
+    if results is None or len(results) == 0 or results[0] is None:
         return []
     elif len(results[0]) > len(columns):
         columns = list(columns) + ["col%d" % i for i in range(len(columns),len(results))]
