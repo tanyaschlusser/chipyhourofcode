@@ -224,8 +224,17 @@ def index():
 
 @app.route("/about")
 def about():
-    """About is a static page."""
-    return render_template('about.html')
+    """Add the volunteer bios and headshots above a static set of sponsors."""
+    result = db_select("""
+                SELECT headshot, name, bio
+                FROM volunteer ORDER BY name;
+                """,
+                columns=[
+                    'headshot',
+                    'name',
+                    'bio'
+                ]) 
+    return render_template('about.html', volunteers=result)
 
 
 @app.route("/location")
