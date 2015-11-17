@@ -69,7 +69,7 @@ def send_confirmation(registration_details):
         {guardian_name}
        
         If your plans change, please make room for others...
-        Unregister at: http://chipyhourofcode.pythonanywhere.com/{conf_uri}
+        Unregister at: http://chipyhourofcode.pythonanywhere.com{conf_uri}
 
              Saturday 13 December 2015
                     9am - 11am
@@ -77,7 +77,7 @@ def send_confirmation(registration_details):
               laptop|tablet|smartphone
              preferred but not required
         
-        ♡
+        ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
         """.format(conf_uri=url_for(
@@ -100,7 +100,7 @@ def send_unregister(registration_details):
 
         We have deleted your information. Thank you!
         
-        ♡
+        ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
         """.format(**registration_details)
@@ -122,7 +122,7 @@ def send_waitlist(registration_details):
         We will send a confirmation email if you get off the wait list.
        
         If your plans change, please make room for others...
-        Unregister at: http://chipyhourofcode.pythonanywhere.com/{conf_uri}
+        Unregister at: http://chipyhourofcode.pythonanywhere.com{conf_uri}
         
         ❤
         ChiPy - the Chicago Python User Group
