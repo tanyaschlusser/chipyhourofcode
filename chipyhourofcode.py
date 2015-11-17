@@ -69,7 +69,7 @@ def send_confirmation(registration_details):
         {guardian_name}
        
         If your plans change, please make room for others...
-        Unregister at: {conf_uri}/{unregister_uri}
+        Unregister at: http://chipyhourofcode.pythonanywhere.com/{conf_uri}
 
              Saturday 13 December 2015
                     9am - 11am
@@ -103,10 +103,7 @@ def send_unregister(registration_details):
         ❤
         ChiPy - the Chicago Python User Group
         and me, Tanya (organizing the event)
-        """.format(conf_uri=url_for(
-                'confirmation',
-                uid=registration_details['unregister_uri']),
-            **registration_details)
+        """.format(**registration_details)
         ),
         subject='Unregistration Confirmed: ChiPy Hour of Code')
 
@@ -125,7 +122,7 @@ def send_waitlist(registration_details):
         We will send a confirmation email if you get off the wait list.
        
         If your plans change, please make room for others...
-        Unregister at: {conf_uri}/{unregister_uri}
+        Unregister at: http://chipyhourofcode.pythonanywhere.com/{conf_uri}
         
         ❤
         ChiPy - the Chicago Python User Group
@@ -230,8 +227,8 @@ def about():
 
 @app.route("/location")
 def location():
-    """Location is a static page."""
-    return render_template('location.html')
+    """Location just needs the google maps key."""
+    return render_template('location.html',key=os.environ['GOOGLEMAPSKEY'])
 
 
 @app.route("/register/", methods=['GET', 'POST'], strict_slashes=False)
@@ -241,8 +238,12 @@ def register():
     GET = form.
     POST = registration.
     """
+    remaining = 19 - int(
+        db_select_one(
+            "SELECT sum(sent_confirmation) FROM attendee;"
+        ).values().pop())
     if request.method == 'GET':
-        return render_template('register.html')
+        return render_template('register.html', remaining=remaining)
     elif request.method == 'POST':
         # Check whether form is filled 
         attendee_data = dict(
@@ -286,6 +287,7 @@ def register():
                     return render_template(
                         'register.html',
                         attendee_data=attendee_data,
+                        remaining=remaining,
                         confirmation_link=url_for(
                             "confirmation",
                             uid=row['unregister_uri'])
@@ -299,7 +301,8 @@ def register():
             return render_template(
                 'register.html',
                 attendee_data=attendee_data,
-                get_confirmation=True
+                get_confirmation=True,
+                remaining=remaining
             )
         # Else add the person.
         parent = attendee_data['guardian_name'].strip()
