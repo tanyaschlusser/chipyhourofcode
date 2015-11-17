@@ -524,6 +524,8 @@ SPONSORS LIST
     background-color: #fff;
     overflow: auto;
     padding-bottom: 0;
+    padding-top: 1em;
+    padding-top: 0;
     position: relative;
     clear: both;
 }
@@ -533,8 +535,15 @@ SPONSORS LIST
 }
 
 .current-sponsor, .past-sponsor {
-    height: 300px;
+    height: 150px;
     width: 48%;
+    float: left;
+    text-align: center;
+}
+
+.wide-sponsor {
+    height: 150px;
+    width: 100%;
     float: left;
     text-align: center;
 }
@@ -542,15 +551,19 @@ SPONSORS LIST
 .sponsor-image {
     height: 70%;
     width: 70%;
-    margin-top: 7%;
     margin-left: 15%;
     background-repeat: no-repeat;
-    background-position: 50% 50%;
+    background-position: 50% 10%;
     background-size: contain;
 }
 
+.sponsor-pyladies .sponsor-image {
+    background-image: url(../img/sponsors/pyladies_chicago.png);
+}
+
 .sponsor-nuit .sponsor-image {
-    background-image: url(../img/sponsors/nuit.jpeg);
+    height: 100%;
+    background-image: url(../img/sponsors/NUIT.png);
 }
 
 .sponsor-ctd .sponsor-image {
@@ -581,6 +594,7 @@ FOOTER
 
 footer.subpage .copyright {
     margin: 1em 0 0 0; 
+    font-size: 6pt;
 }
 
 /*
