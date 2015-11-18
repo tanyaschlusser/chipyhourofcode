@@ -174,8 +174,10 @@ def db_query(query, args=[], commit=False):
     con = db.connect()
     result = con.execute(query, args)
     if result and result.returns_rows:
-        all_results = [
-            [elem.decode('utf-8') for elem in r]
+        all_results = [[
+                elem.decode('utf-8') if isinstance(elem, basestring) else elem
+                for elem in r
+            ]
             for r in result.fetchall() if r is not None]
     con.close()
     return all_results
@@ -238,7 +240,7 @@ def about():
                 ]) 
     for r in result:
         r['headshot'] = url_for('static', filename='img/speakers/{}'.format(r['headshot']))
-        r['bio'] = r['bio'].decode('utf-8')
+        r['bio'] = r['bio'].encode('utf-8')
     return render_template('about.html', volunteers=result)
 
 
