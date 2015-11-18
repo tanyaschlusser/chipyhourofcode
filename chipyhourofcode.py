@@ -177,6 +177,7 @@ def db_query(query, args=[], commit=False):
         all_results = [[
                 element if not isinstance(element, basestring)
                 else element.decode('utf-8').encode('utf-8')
+                for element in r
             ]
             r for r in result.fetchall() if r is not None]
     con.close()
