@@ -17,13 +17,16 @@
 {% if volunteers is defined  %}
   {% for volunteer in volunteers %}
         <div style="width:42%;margin:1em;flex:1;min-width:400px">
-          <img src="{{ volunteer.headshot }}"
-               alt="{{ volunteer.name }}"
+          <img src="{{ volunteer['headshot'] }}"
+               alt="{{ volunteer['name'] }}"
                style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
-          <b style="font-weight:900;font-size:1.2em">{{ volunteer.name }}</b>
-          <p>{{ volunteer.bio }}</p>
+          <b style="font-weight:900;font-size:1.2em">{{ volunteer['name'] }}</b>
+          <p>{{ volunteer['bio'] }}</p>
         </div>
   {% endfor %}
+  {% if len(volunteers) is divisibleby 2 %}
+        <div style="width:42%;margin:1em;flex:1;min-width:400px"></div>
+  {% endif %}
 {% else %}
         <div style="width:42%;margin:1em;flex:1;min-width:400px">
           <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
