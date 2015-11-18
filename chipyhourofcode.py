@@ -179,7 +179,7 @@ def db_query(query, args=[], commit=False):
                 else element.decode('utf-8').encode('utf-8')
                 for element in r
             ]
-            r for r in result.fetchall() if r is not None]
+            for r in result.fetchall() if r is not None]
     con.close()
     return all_results
     
