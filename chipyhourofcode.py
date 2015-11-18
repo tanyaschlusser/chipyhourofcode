@@ -238,6 +238,7 @@ def about():
                 ]) 
     for r in result:
         r['headshot'] = url_for('static', filename='img/speakers/{}'.format(r['headshot']))
+        r['bio'] = r['bio'].decode('utf-8')
     return render_template('about.html', volunteers=result)
 
 
