@@ -141,7 +141,7 @@ def send_waitlist(registration_details):
 
 ## ----------------------------------------- Database parts ----- ##
 def connect_db():
-    engine = create_engine(os.environ['MYSQL_CONNECTION'])
+    engine = create_engine(os.environ['MYSQL_CONNECTION'] + '?charset=utf8')
     return engine
     
 
@@ -174,12 +174,7 @@ def db_query(query, args=[], commit=False):
     con = db.connect()
     result = con.execute(query, args)
     if result and result.returns_rows:
-        all_results = [[
-                element if not isinstance(element, basestring)
-                else unicode(element, 'utf-8').encode('utf-8')
-                for element in r
-            ]
-            for r in result.fetchall() if r is not None]
+        all_results = [r for r in result.fetchall() if r is not None]
     con.close()
     return all_results
     
