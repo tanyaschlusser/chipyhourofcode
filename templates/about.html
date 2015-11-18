@@ -24,7 +24,7 @@
           <p>{{ volunteer['bio'] }}</p>
         </div>
   {% endfor %}
-  {% if length(volunteers) is divisibleby 2 %}
+  {% if volunteers|length is divisibleby 2 %}
         <div style="width:42%;margin:1em;flex:1;min-width:400px"></div>
   {% endif %}
 {% else %}
