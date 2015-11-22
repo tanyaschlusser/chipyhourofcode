@@ -21,7 +21,7 @@
                alt="{{ volunteer['name'] }}"
                style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
           <b style="font-weight:900;font-size:1.2em">{{ volunteer['name'] }}</b>
-          <p>{{ volunteer['bio'] }}</p>
+          <p>{{ volunteer['bio']|safe }}</p>
         </div>
   {% endfor %}
   {% if volunteers|length is not divisibleby 2 %}
