@@ -71,11 +71,13 @@ def send_confirmation(registration_details):
         If your plans change, please make room for others...
         Unregister at: http://chipyhourofcode.pythonanywhere.com{conf_uri}
 
-             Saturday 13 December 2015
-                    9am - 11am
-            Feinberg School of Medicine
-              laptop|tablet|smartphone
-             preferred but not required
+               Saturday 13 December 2015
+                      9am - 11am
+         Robert H. Lurie Medical Research Center
+               Searle Conference Room
+           303 E. Superior Street, Chicago, IL
+                laptop|tablet|smartphone
+               preferred but not required
         
         ❤
         ChiPy - the Chicago Python User Group
