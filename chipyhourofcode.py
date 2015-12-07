@@ -71,7 +71,7 @@ def send_confirmation(registration_details):
         If your plans change, please make room for others...
         Unregister at: http://chipyhourofcode.pythonanywhere.com{conf_uri}
 
-               Saturday 13 December 2015
+               Sunday 13 December 2015
                       9am - 11am
          Robert H. Lurie Medical Research Center
                Searle Conference Room
