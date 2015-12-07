@@ -16,7 +16,7 @@
 
 {% if volunteers is defined  %}
   {% for volunteer in volunteers %}
-        <div style="width:42%;margin:1em;flex:1;min-width:400px">
+        <div style="width:42%;margin:1em;flex:auto;min-width:400px">
           <img src="{{ volunteer['headshot'] }}"
                alt="{{ volunteer['name'] }}"
                style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
@@ -25,16 +25,16 @@
         </div>
   {% endfor %}
   {% if volunteers|length is not divisibleby 2 %}
-        <div style="width:42%;margin:1em;flex:1;min-width:400px"></div>
+        <div style="width:42%;margin:1em;flex:auto;min-width:400px"></div>
   {% endif %}
 {% else %}
-        <div style="width:42%;margin:1em;flex:1;min-width:400px">
+        <div style="width:42%;margin:1em;flex:auto;min-width:400px">
           <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
                alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
           <b style="font-weight:900;font-size:1.2em">person placeholder</b>
           <p>biographical details</p>
         </div>
-        <div style="width:42%;margin:1em;flex:1;min-width:400px">
+        <div style="width:42%;margin:1em;flex:auto;min-width:400px">
           <img src="{{ url_for('static', filename='img/speakers/default.png') }}"
                alt="person" style="border:1px solid gray;float:left;margin-right:2em;height:100px;"></img>
           <b style="font-weight:900;font-size:1.2em">person placeholder</b>
